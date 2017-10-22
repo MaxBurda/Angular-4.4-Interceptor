@@ -1,25 +1,43 @@
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs/Observable';
-import {Injectable} from '@angular/core';
-import 'rxjs/add/operator/do';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse
+} from "@angular/common/http";
+import {Observable} from "rxjs/Observable";
+import {Injectable} from "@angular/core";
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/catch";
 
 @Injectable()
-export class Interceptor implements  HttpInterceptor {
+
+export class Interceptor implements HttpInterceptor {
+  i: number = 0;
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    //this.loaderService.show();
-    console.log('______________start______________');
+    this.i += 1;
     return next.handle(req)
       .do(
         (response) => {
           if (response instanceof HttpResponse) {
-            console.log('______________end______________');
-            //this.loaderService.hide();
+            this.i -= 1;
+            if (this.i == 0) {
+              console.log('END');
+            }
           }
         },
         (error) => {
-          console.log('______________end______________');
-          //this.loaderService.hide();
-        });
+          this.i -= 1;
+          console.log(error);
+        }
+      )
+      .catch(err => {
+        if (err instanceof HttpErrorResponse) {
+          console.log('Processing http error', err);
+        }
+        return Observable.throw(err);
+      });
   }
 }
 

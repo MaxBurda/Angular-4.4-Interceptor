@@ -4,7 +4,7 @@ import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 interface UserResponse {
   login: string,
   bio: string,
-  company: string
+  subscriptions_url: string
 }
 
 @Component({
@@ -12,7 +12,7 @@ interface UserResponse {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
   constructor(private http: HttpClient) {
 
   }
@@ -20,20 +20,19 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     this.http.get<UserResponse>('https://api.github.com/users/maxburda')
       .subscribe(data => {
-        console.log(data.login);
-        console.log(data.bio);
-        console.log(data.company);
-      },
+          console.log(data.login);
+          console.log(data.bio);
+          console.log(data.subscriptions_url);
+        },
         (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          console.log("Client-side Error occurred");
-        } else {
-          console.log("Server-side Error occurred");
+          if (err.error instanceof Error) {
+            console.log("Client-side Error occurred");
+          } else {
+            console.log("Server-side Error occurred");
+          }
         }
-
-      }
-    );
-    const req =this.http.post('https://jsonplaceholder.typicode.com/posts', {
+      );
+    const req = this.http.post('https://jsonplaceholder.typicode.com/posts', {
       title: 'foo',
       body: 'bar',
       userUd: 1
