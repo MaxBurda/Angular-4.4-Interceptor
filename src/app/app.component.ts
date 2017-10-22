@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {SlimLoadingBarService} from "ng2-slim-loading-bar";
 
 interface UserResponse {
   login: string,
@@ -13,7 +14,7 @@ interface UserResponse {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private _loadingBar: SlimLoadingBarService) {
 
   }
 
